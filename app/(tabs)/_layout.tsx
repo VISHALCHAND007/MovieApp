@@ -50,18 +50,6 @@ const _layout = () => {
       }}
     >
       <Tabs.Screen
-        name="index"
-        options={{
-          title: "home",
-          headerShown: false,
-          tabBarIcon: ({ focused }) => (
-            <>
-              <TabIcon isfocused={focused} icon={icons.home} title="Home" />
-            </>
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="search"
         options={{
           title: "Search",
@@ -73,6 +61,19 @@ const _layout = () => {
           ),
         }}
       />
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: "home",
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <>
+              <TabIcon isfocused={focused} icon={icons.home} title="Home" />
+            </>
+          ),
+        }}
+      />
+
       <Tabs.Screen
         name="bookmarks"
         options={{
