@@ -6,7 +6,7 @@ import {
   FlatList,
   ActivityIndicator,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { images } from "@/constants/images";
 import { useRouter } from "expo-router";
 import useFetch from "@/services/useFetch";
@@ -23,7 +23,20 @@ const search = () => {
     data: movie,
     loading: moviesLoading,
     error: moviesError,
-  } = useFetch(() => fetchMovies({ query: "" }));
+    reFetch: loadMovies,
+    reset: resetMovies,
+  } = useFetch(() => fetchMovies({ query: searchQuery }), false);
+
+  useEffect(() => {
+    const asyncFunction = async () => {
+      if (searchQuery.trim()) {
+        await loadMovies();
+      } else {
+        resetMovies();
+      }
+    };
+    asyncFunction();
+  }, [searchQuery]);
 
   return (
     <View className="flex-1 bg-primary ">
