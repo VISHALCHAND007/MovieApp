@@ -14,13 +14,14 @@ import { fetchMovies } from "@/services/api";
 import MovieCard from "@/components/MovieCard";
 import { icons } from "@/constants/icons";
 import SearchBar from "@/components/SearchBar";
+import { updateSearchCount } from "@/services/appwrite";
 
 const search = () => {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   const {
-    data: movie,
+    data: movies,
     loading: moviesLoading,
     error: moviesError,
     reFetch: loadMovies,
@@ -33,6 +34,9 @@ const search = () => {
     const timeoutId = setTimeout(async () => {
       if (searchQuery.trim()) {
         await loadMovies();
+        //make appwrite entry for trending searches
+        if (movies?.length > 0 && movies?.[0])
+          await updateSearchCount(searchQuery, movies[0]);
       } else {
         resetMovies();
       }
@@ -48,7 +52,7 @@ const search = () => {
         resizeMode="cover"
       />
       <FlatList
-        data={movie}
+        data={movies}
         renderItem={({ item }) => <MovieCard {...item} />}
         keyExtractor={(item) => item.id.toString()}
         numColumns={3}
@@ -87,7 +91,7 @@ const search = () => {
             {!moviesLoading &&
               !moviesError &&
               searchQuery.trim() &&
-              movie?.length! > 0 && (
+              movies?.length! > 0 && (
                 <Text className="text-xl text-white font-bold my-5">
                   Search results for{" "}
                   <Text className="text-accent">{searchQuery}</Text>
